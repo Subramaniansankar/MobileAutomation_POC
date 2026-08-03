@@ -1,0 +1,9 @@
+ANDROID_UDID = "ZF6525JTJS"
+IOS_UDID = "00008020-00051DD83481002E"
+
+ANDROID_PACKAGE = "com.openvehicles.OVMS"
+ANDROID_ACTIVITY = "com.openvehicles.OVMS.ui2.MainActivityUI2"
+
+IOS_BUNDLE_ID = "com.openvehicles.ovms"
+
+APPIUM_SERVER = "http://127.0.0.1:4723"
