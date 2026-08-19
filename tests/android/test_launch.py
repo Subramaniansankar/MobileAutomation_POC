@@ -1,4 +1,4 @@
-from pages.launch_page import LaunchPage
+from pages.android.launch_page import LaunchPage
 
 
 class TestLaunch:
@@ -6,6 +6,8 @@ class TestLaunch:
     def test_verify_application_launch(self, driver):
 
         launch_page = LaunchPage(driver)
+
+        driver.activate_app("com.openvehicles.OVMS")
 
         # Handle iOS popup if displayed
         launch_page.dismiss_version_popup()

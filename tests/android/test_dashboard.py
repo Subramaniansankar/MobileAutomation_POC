@@ -1,10 +1,12 @@
-from pages.launch_page import LaunchPage
-from pages.dashboard_page import DashboardPage
+from pages.android.launch_page import LaunchPage
+from pages.android.dashboard_page import DashboardPage
 
 
 class TestDashboard:
 
     def test_verify_dashboard(self, driver):
+
+        driver.activate_app("com.openvehicles.OVMS")
 
         launch = LaunchPage(driver)
 

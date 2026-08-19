@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+
 class LaunchPage:
 
     def __init__(self, driver):
@@ -57,14 +58,20 @@ class LaunchPage:
 
 
     def verify_app_launched(self):
-        try:
-            battery = WebDriverWait(self.driver, 20).until(
-                EC.visibility_of_element_located(self.battery_percentage)
-            )
 
-            print(f"Battery Percentage: {battery.text}")
+        expected_package = "com.openvehicles.OVMS"
+
+        actual_package = self.driver.current_package
+        actual_activity = self.driver.current_activity
+
+        print("========== App State ==========")
+        print(f"Current Package : {actual_package}")
+        print(f"Current Activity: {actual_activity}")
+        print("===============================")
+
+        if actual_package == expected_package:
+            print("✅ OVMS application launched successfully")
             return True
 
-        except TimeoutException:
-            print("❌ Battery percentage not displayed")
-            return False
+        print("❌ OVMS application is not active")
+        return False

@@ -9,85 +9,181 @@ from pages.android.settings_page import SettingsPage
 
 class TestVehicle:
 
-    def test_verify_vehicle_information(self, driver):
+    def test_vehicle_end_to_end_flow(self, driver):
+
+        # =====================================================
+        # STEP 1: LAUNCH OVMS
+        # =====================================================
+
+        driver.activate_app(
+            "com.openvehicles.OVMS"
+        )
+
+        time.sleep(3)
 
         launch = LaunchPage(driver)
 
         launch.dismiss_version_popup()
         launch.allow_location_permission()
 
-        driver.activate_app("com.openvehicles.OVMS")
-        time.sleep(3)
+        assert launch.verify_app_launched(), \
+            "OVMS application did not launch successfully"
 
-        assert launch.verify_app_launched(), "OVMS application did not launch successfully"
+        print(
+            "========== STEP 1: OVMS LAUNCHED =========="
+        )
 
-        print("========== STEP 1: OVMS LAUNCHED ==========")
+        # =====================================================
+        # STEP 2: START / STOP CHARGING
+        # =====================================================
 
         charging = ChargingPage(driver)
 
-        charging.start_stop_charging(confirm=True)
+        charging.start_stop_charging(
+            confirm=True
+        )
 
-        print("========== STEP 2: CHARGING START/STOP COMPLETED ==========")
+        print(
+            "========== STEP 2: CHARGING START/STOP COMPLETED =========="
+        )
+
+        # =====================================================
+        # STEP 3: VERIFY DASHBOARD
+        # =====================================================
 
         dashboard = DashboardPage(driver)
 
-        assert dashboard.verify_dashboard_loaded(), "Dashboard is not loaded"
+        assert dashboard.verify_dashboard_loaded(), \
+            "Dashboard is not loaded"
 
-        print("========== STEP 3: DASHBOARD VERIFIED ==========")
+        print(
+            "========== STEP 3: DASHBOARD VERIFIED =========="
+        )
 
-        assert dashboard.open_controls(), "Failed to open Controls menu"
+        # =====================================================
+        # STEP 4: OPEN CONTROLS
+        # =====================================================
 
-        print("========== STEP 4: CONTROLS OPENED ==========")
+        assert dashboard.open_controls(), \
+            "Failed to open Controls menu"
 
-        assert dashboard.navigate_up(), "Failed to navigate back from Controls"
+        print(
+            "========== STEP 4: CONTROLS OPENED =========="
+        )
+
+        # =====================================================
+        # STEP 5: BACK TO DASHBOARD
+        # =====================================================
+
+        assert dashboard.navigate_up(), \
+            "Failed to navigate back from Controls"
 
         time.sleep(2)
 
         assert dashboard.verify_dashboard_loaded(), \
             "Dashboard is not loaded after navigating back"
 
-        print("========== STEP 5: BACK TO DASHBOARD ==========")
+        print(
+            "========== STEP 5: BACK TO DASHBOARD =========="
+        )
+
+        # =====================================================
+        # STEP 6: VERIFY VEHICLE INFORMATION
+        # =====================================================
 
         vehicle = VehiclePage(driver)
 
         assert vehicle.scroll_to_vehicle_information(), \
             "Failed to scroll to Vehicle Information"
 
-        print("========== STEP 6: VEHICLE DETAILS ==========")
-
         vehicle_data = vehicle.get_vehicle_information()
 
-        assert vehicle_data, "Vehicle information was not displayed"
+        assert vehicle_data, \
+            "Vehicle information was not displayed"
 
-        assert dashboard.open_settings(), "Failed to open Settings"
+        print(
+            "========== STEP 6: VEHICLE INFORMATION VERIFIED =========="
+        )
 
-        print("========== STEP 7: SETTINGS OPENED ==========")
+        # =====================================================
+        # STEP 7: OPEN SETTINGS
+        # =====================================================
+
+        assert dashboard.open_settings(), \
+            "Failed to open Settings"
+
+        print(
+            "========== STEP 7: SETTINGS OPENED =========="
+        )
 
         settings = SettingsPage(driver)
 
-        vehicle_id = "TEST_VEHICLE_ID"
-        vehicle_label = "Test Vehicle"
+        # =====================================================
+        # TEST DATA
+        # =====================================================
+
+        vehicle_id = "TEST_VEHICLE_002"
+
+        vehicle_label = "Automation Vehicle"
+
         server_password = "TEST_SERVER_PASSWORD"
+
         module_password = "TEST_MODULE_PASSWORD"
 
-        assert settings.add_vehicle(
+        # =====================================================
+        # STEP 8: CLICK + AND ADD NEW VEHICLE
+        # =====================================================
+
+        assert settings.add_new_vehicle(
             vehicle_id=vehicle_id,
             vehicle_label=vehicle_label,
             server_password=server_password,
             module_password=module_password
-        ), "Failed to add vehicle"
+        ), "Failed to add new vehicle"
 
-        print("========== STEP 8: VEHICLE ADDED AND SAVED ==========")
+        print(
+            "========== STEP 8: NEW VEHICLE ADDED =========="
+        )
 
         time.sleep(2)
 
-        assert dashboard.verify_dashboard_loaded(), \
-            "Dashboard is not loaded after adding vehicle"
-
-        print("========== STEP 9: FINAL DASHBOARD VERIFIED ==========")
+        # =====================================================
+        # STEP 9: PRINT CURRENT SCREEN
+        # =====================================================
 
         print("==============================================")
-        print("Final App State")
-        print("Current Package :", driver.current_package)
-        print("Current Activity:", driver.current_activity)
+        print("APP STATE AFTER ADDING VEHICLE")
+        print(
+            "Current Package :",
+            driver.current_package
+        )
+        print(
+            "Current Activity:",
+            driver.current_activity
+        )
+        print("==============================================")
+
+        # =====================================================
+        # STEP 10: NAVIGATE BACK
+        # =====================================================
+
+        assert settings.navigate_up(), \
+            "Failed to navigate back after adding vehicle"
+
+        time.sleep(2)
+
+        print(
+            "========== STEP 10: NAVIGATED BACK =========="
+        )
+
+        # =====================================================
+        # FINAL STATE
+        # =====================================================
+
+        print("==============================================")
+        print("TC_003 COMPLETED")
+        print("New Vehicle ID    :", vehicle_id)
+        print("New Vehicle Label :", vehicle_label)
+        print("Current Package   :", driver.current_package)
+        print("Current Activity  :", driver.current_activity)
         print("==============================================")
