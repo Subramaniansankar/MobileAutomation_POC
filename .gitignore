@@ -1,0 +1,11 @@
+venv/
+.venv/
+__pycache__/
+.pytest_cache/
+reports/
+allure-results/
+*.pyc
+.vscode/
+.idea/
+.DS_Store
+MobileAutomation_POC/
