@@ -22,6 +22,7 @@ def get_driver():
     # Reuse WebDriverAgent
     options.use_prebuilt_wda = True
     options.use_new_wda = False
+    options.show_xcode_log = True
 
     # Don't reinstall the app every run
     options.no_reset = True
